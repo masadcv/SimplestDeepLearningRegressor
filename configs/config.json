@@ -1,0 +1,27 @@
+{
+    "work_dir": "./experiments/mnist",
+    "dataloader": {
+        "batch_size": 32,
+        "dataset": "MNIST",
+        "num_sel_train_images": -1, 
+        "num_sel_test_images": -1, 
+        "path_to_data": "./data",
+        "split": "train",
+        "num_workers": 4,
+        "num_classes": 1
+    },
+    "loss": {
+        "type": "MSE"
+    },
+    "optimiser": {
+        "type": "SGD",
+        "lr": 0.001,
+        "momentum": 0.9
+    },
+    "training": {
+        "use_cuda": true, 
+        "log_interval": 100,
+        "eval_interval": 1,
+        "epochs": 150
+    }
+}
