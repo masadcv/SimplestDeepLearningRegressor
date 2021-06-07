@@ -96,7 +96,7 @@ def main():
 
         if epoch % train_config["eval_interval"] == 0:
             args["epoch_name"] = ""
-            core.function.evaluate(args, model, val_loader, loss_func, epoch)
+            accuracy = core.function.evaluate(args, model, val_loader, loss_func, epoch)
 
         # TODO: save modle that has good validation
 

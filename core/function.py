@@ -25,7 +25,7 @@ def train(args, model, train_loader, optimizer, loss_func, epoch):
                 )
             )
 
-    if "tb_writer" in args.keys:
+    if "tb_writer" in args.keys():
         args["tb_writer"].add_scalar(
             "train_%s_loss" % args["epoch_name"], losses.avg, epoch
         )
@@ -58,3 +58,5 @@ def evaluate(args, model, test_loader, loss_func, epoch):
         args["tb_writer"].add_scalar(
             "test_%s_acc" % args["epoch_name"], accuracy, epoch
         )
+
+    return accuracy
