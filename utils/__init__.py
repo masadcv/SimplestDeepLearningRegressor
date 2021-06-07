@@ -1,18 +1,21 @@
 import json
 
+
 def load_json(file):
     try:
-        with open(file, 'r') as f:
+        with open(file, "r") as f:
             return json.load(f)
     except:
-        raise IOError('json file {} not found'.format(file))
+        raise IOError("json file {} not found".format(file))
+
 
 def save_json(data, file):
     try:
-        with open(file, 'w') as f:
+        with open(file, "w") as f:
             json.dump(data, f, indent=4)
     except:
-        raise IOError('json file {} write error'.format(file))
+        raise IOError("json file {} write error".format(file))
+
 
 class AverageMeter(object):
     def __init__(self):

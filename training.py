@@ -1,15 +1,17 @@
 import argparse
 import datetime
-import tensorboardX
-import torch
 import os
 
+import tensorboardX
+import torch
+
+import core.function
 import core.loss
 import core.optimisers
-import core.function
 import dataset.dataloaders
 import models.model_zoo
 import utils
+
 
 def parse_args():
     parser = argparse.ArgumentParser("Basic Neural Network Trainer")
@@ -27,10 +29,10 @@ def parse_args():
 
 def main():
     args = parse_args()
-    
+
     # load config
     exp_config = utils.load_json(args.config)
-    
+
     # create working directories
     work_dir = os.path.join(exp_config["work_dir"], args.model)
     os.makedirs(work_dir, exist_ok=True)
