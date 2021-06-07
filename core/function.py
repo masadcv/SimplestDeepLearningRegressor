@@ -46,7 +46,7 @@ def evaluate(args, model, test_loader, loss_func, epoch):
 
     accuracy = cacc / (len(test_loader) * test_loader.batch_size)
     print(
-        "\nTest set: Average loss: {:.4f}, Accuracy: ({:.0f}%)\n".format(
+        "\nTest set: Average loss: {:.4f}, Accuracy (mse): {:.4f}\n".format(
             losses.avg, accuracy
         )
     )
