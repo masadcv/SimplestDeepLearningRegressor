@@ -1,1 +1,2 @@
-from .resnet import resnet18, resnet34
+from .models import MNistCNN, MNistMLP
+from .model_zoo import modelname_to_func

@@ -1,6 +1,14 @@
+"""
+This file is based on: https://github.com/pytorch/vision/blob/main/torchvision/datasets/mnist.py
+
+It copies the basic functionality of downloading, reading and preparing data from above file.
+
+"""
+
 import os
+import random
 import warnings
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 from urllib.error import URLError
 
 import numpy as np
@@ -78,15 +86,18 @@ class MNIST(VisionDataset):
     def __init__(
         self,
         root: str,
-        train: bool = True,
+        set: str = "train",
+        train_val_split: float = 0.8,
+        download: bool = False,
         transform: Optional[Callable] = None,
         target_transform: Optional[Callable] = None,
-        download: bool = False,
+        num_sel_images: int = -1,
     ) -> None:
         super(MNIST, self).__init__(
             root, transform=transform, target_transform=target_transform
         )
-        self.train = train  # training set or test set
+        assert set in ["train", "val", "test"], "invalid subset {}".format(set)
+        self.set = set  # train or val or test set
 
         if download:
             self.download()
@@ -96,13 +107,31 @@ class MNIST(VisionDataset):
                 "Dataset not found." + " You can use download=True to download it"
             )
 
-        if self.train:
+        if self.set == "train" or self.set == "val":
             data_file = self.training_file
         else:
             data_file = self.test_file
+
         self.data, self.targets = torch.load(
             os.path.join(self.processed_folder, data_file)
         )
+
+        if self.set == "train" or self.set == "val":
+            num_train = int(self.data.shape[0] * train_val_split)
+
+        # first num_train images for training, num_train:end for val
+        if self.set == "train":
+            self.data = self.data[:num_train]
+            self.targets = self.targets[:num_train]
+        elif self.set == "val":
+            self.data = self.data[num_train:]
+            self.targets = self.targets[num_train:]
+
+        # for fast prototyping, implement subset selections
+        # where len(subset) < len(dataset)
+        if num_sel_images > 0:
+            self.data = self.data[0:num_sel_images, ...]
+            self.targets = self.targets[0:num_sel_images, ...]
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         """
@@ -112,6 +141,7 @@ class MNIST(VisionDataset):
         Returns:
             tuple: (image, target) where target is index of the target class.
         """
+
         img, target = self.data[index], self.targets[index]
 
         target = np.array(target).astype(np.float32)
@@ -125,6 +155,8 @@ class MNIST(VisionDataset):
 
         if self.target_transform is not None:
             target = self.target_transform(target)
+
+        target = np.array([target], dtype=np.float32)
 
         return img, target
 

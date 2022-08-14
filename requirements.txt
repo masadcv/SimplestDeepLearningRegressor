@@ -1,0 +1,8 @@
+torch
+matplotlib
+torchvision
+numpy
+tensorboard
+torchmetrics
+torch-tb-profiler
+seaborn
